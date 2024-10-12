@@ -10,7 +10,7 @@ To use the `oblivious-srp` library, follow these steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/oblivious-srp.git
+   git clone https://github.com/14morpheus14/oblivious-srp.git
    cd oblivious-srp
    ```
 
