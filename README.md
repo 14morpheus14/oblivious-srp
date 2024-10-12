@@ -40,9 +40,9 @@ To use the `oblivious-srp` library, follow these steps:
 |                                        | `blind(v')` → Send to server                  |                                      |
 | 4.                                    |                                               | Evaluate OPRF on `blind(v')`         |
 | 5.                                    | Finalize OPRF result:                         |                                      |
-|                                        | `OPRF(v') → v1'`                              |                                      |
+|                                        | `OPRF(v') → v1'`                              |                                     |
 | 6.                                    | Compute `x` from `v'` and `v1'`:              |                                      |
-|                                        | `x = H(v' || v1')`                            |                                      |
+|                                       | `x = H(v', v1')`                            |                                      |
 | 7.                                    | Compute public verifier:                      |                                      |
 |                                        | `v = g^x % N`                                 |                                      |
 |                                        | Send `v`, `username`, and `s` to server       | Store `v`, `username`, and `s`       |
@@ -65,9 +65,9 @@ To use the `oblivious-srp` library, follow these steps:
 | 6.                                    | Finalize OPRF result:                         |                                      |
 |                                        | `OPRF(v') → v1'`                              |                                      |
 | 7.                                    | Compute `x` from `v'` and `v1'`:              |                                      |
-|                                        | `x = H(v' || v1')`                            |                                      |
+|                                        | `x = H(v', v1')`                            |                                      |
 | 8.                                    | Compute session key:                          | Compute session key:                |
-|                                        | `u = H(A || B)`                               | `u = H(A || B)`                      |
+|                                        | `u = H(A, B)`                               | `u = H(A || B)`                      |
 |                                        | `S = (B - k * g^x)^(a + u * x) % N`           | `S = (A * v^u)^b % N`                |
 | 9.                                    | Derive session key `Kc = H(S)`                | Derive session key `K = H(S)`        |
 | 10.                                   | Derive client session proof `Mc`:             | Verify client proof `Ms`:            |
