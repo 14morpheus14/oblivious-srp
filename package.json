@@ -1,6 +1,6 @@
 {
   "name": "oblivious-srp",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha",
   "directories": {
     "util": "util",
     "server": "server",
