@@ -1,0 +1,34 @@
+{
+  "name": "oblivious-srp",
+  "version": "1.0.0",
+  "directories": {
+    "util": "util",
+    "server": "server",
+    "client": "client"
+  },
+  "scripts": {
+    "tutorial": "node tutorial/example.cjs"
+  },
+  "keywords": [
+    "SRP",
+    "secure remote password",
+    "oblivious SRP",
+    "OPRF",
+    "password authentication",
+    "multi-server SRP",
+    "secure authentication",
+    "cryptography",
+    "privacy"
+  ],
+  "author": "Yamya Reiki <reiki.yamya14@gmail.com>",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "dependencies": {
+    "@cloudflare/voprf-ts": "^1.0.0",
+    "crypto-random-hex": "^1.0.0",
+    "jsbn": "^1.1.0",
+    "pad-start": "^1.0.2"
+  },
+  "main": "index.cjs",
+  "description": "Oblivious SRP is an enhanced Secure Remote Password protocol that provides stronger protection against dictionary attacks by utilizing username-rate-limited Oblivious Pseudo-Random Functions (OPRF) and supporting multi-server setups."
+}
