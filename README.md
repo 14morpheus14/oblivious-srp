@@ -67,14 +67,14 @@ To use the `oblivious-srp` library, follow these steps:
 | 7.                                    | Compute `x` from `v'` and `v1'`:              |                                      |
 |                                        | `x = H(v', v1')`                            |                                      |
 | 8.                                    | Compute session key:                          | Compute session key:                |
-|                                        | `u = H(A, B)`                               | `u = H(A || B)`                      |
+|                                        | `u = H(A, B)`                               | `u = H(A, B)`                      |
 |                                        | `S = (B - k * g^x)^(a + u * x) % N`           | `S = (A * v^u)^b % N`                |
 | 9.                                    | Derive session key `Kc = H(S)`                | Derive session key `K = H(S)`        |
-| 10.                                   | Derive client session proof `Mc`:             | Verify client proof `Ms`:            |
+| 10.                                   | Derive client session proof `Mc`:             | Verify client proof `Mc`:            |
 |                                        | `Mc = H(H(N) XOR H(g), H(I), s, A, B, Kc)`    | `Ms = H(H(N) XOR H(g), H(I), s, A, B, K)` |
 |                                        |                                               | If `Ms === Mc`, derive server proof: |
 |                                        |                                               | `P = H(A, Mc, K)`                    |
-| 11.                                   | Verify server session proof `Pc`:             |                                      |
+| 11.                                   | Verify server session proof `P`:             |                                      |
 |                                        | `Pc = H(A, Mc, Kc)`                           |                                      |
 |                                        | If `Pc === P`, session established            |                                      |
 
@@ -86,10 +86,7 @@ To use the `oblivious-srp` library, follow these steps:
 - The server stores the verifier along with the username and salt.
 - During authentication, the user proves knowledge of the password through zero knowledge proof.
 - A malicious server can access `v`, `s`, and the username, making dictionary attacks possible.
-
-#### Vulnerabilities
-
-- If attackers gain access to the verifier, they can perform brute-force attacks on the password.
+- The malicious server can compute `sk_guess = H(salt, username, password_guess)` and `v_guess = g^sk_guess mod N` for each of its password guesses and if the guessed `v_guess = v`, then server knows the correct password. 
 
 ### Oblivious SRP
 
@@ -97,7 +94,10 @@ To use the `oblivious-srp` library, follow these steps:
 - The verifier is split into a private verifier (`v'`) and a public verifier (`v`). 
 - The public verifier is derived from the OPRF evaluation of the private verifier, and OPRF is rate-limited.
 - Multi-server support makes offline attacks harder by requiring multiple malicious servers to collaborate.
-
+- The public verifier (`v`) is calculated as `v = g^H(v' || v1' || ... || vn')` where `v1' ... vn'` are OPRF evaluation responses of n-th SRP server.
+- If the SRP server is malicious, it can access public verifier `v`, salt `s` and the username. To mount a dictionary attack, it will require to compute `sk_guess = H(salt, username, password_guess)`, `v_guess' = g^sk_guess mod N` and then acquire the real-time OPRF responses `vn'` from each of the SRP servers to compute `v_guess = g^H(v_guess' || v1' || ... || vn')`. Only if `v_guess = v`, does the server gets to know the correct password.
+- Since, the OPRF evaluation is rate-limited by username, it requires a total compromise or that all the SRP servers be collaboratively malicious, to break the password.
+  
 #### Enhanced Security
 
 - Requires attackers to compromise multiple servers to execute dictionary attacks, as OPRF responses are rate-limited.
